@@ -7,7 +7,7 @@ import { Button, Col, Form, Image, ListGroup, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../redux/actions/cartActions";
 
-const CartScreen = ({ match, location }) => {
+const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id;
   const qty = location.search.split("=")[1];
   const dispatch = useDispatch();
@@ -22,6 +22,11 @@ const CartScreen = ({ match, location }) => {
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
   };
+
+  const checkoutHandler = () => {
+    history.push("/login?redirect=shipping");
+  };
+
   return (
     <div>
       <Row>
@@ -78,7 +83,9 @@ const CartScreen = ({ match, location }) => {
             </Row>
           </ListGroup.Item>
           <ListGroup.Item>
-            <Button className="btn-block">Proceed to Checkout</Button>
+            <Button className="btn-block" onClick={checkoutHandler}>
+              Proceed to Checkout
+            </Button>
           </ListGroup.Item>
         </Col>
       </Row>
