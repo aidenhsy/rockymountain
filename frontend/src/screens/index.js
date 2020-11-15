@@ -7,6 +7,11 @@ import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
 import ProfileScreen from "./ProfileScreen";
 
+//Checkout
+import ShippingScreen from "./ShippingScreen";
+import PaymentScreen from "./PaymentScreen";
+import PlaceOrderScreen from "./PlaceOrderScreen";
+
 const screens = {
   Home: HomeScreen,
   Product: ProductScreen,
@@ -14,6 +19,9 @@ const screens = {
   Register: RegisterScreen,
   Profile: ProfileScreen,
   Cart: CartScreen,
+  Shipping: ShippingScreen,
+  Payment: PaymentScreen,
+  PlaceOrder: PlaceOrderScreen,
 };
 
 export default screens;

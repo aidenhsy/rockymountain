@@ -19,6 +19,9 @@ const App = () => {
           <Route path="/register" component={screens.Register} />
           <Route path="/profile" component={screens.Profile} />
           <Route path="/cart/:id?" component={screens.Cart} />
+          <Route path="/shipping" component={screens.Shipping} />
+          <Route path="/payment" component={screens.Payment} />
+          <Route path="/placeorder" component={screens.PlaceOrder} />
         </Container>
       </main>
       <Footer />
