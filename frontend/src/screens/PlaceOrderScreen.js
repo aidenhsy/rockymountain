@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 //Redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { createOrder } from "../redux/actions/orderActions";
 
 //Presentational
 import CheckoutSteps from "../components/CheckoutSteps";
@@ -12,6 +13,7 @@ const PlaceOrderScreen = ({ history }) => {
   const { cartItems, shippingAddress, paymentMethod } = useSelector(
     (state) => state.cart
   );
+  const { success, order } = useSelector((state) => state.orderCreate);
 
   //Calculations
   const addDecimal = (num) => Math.round((num * 100) / 100).toFixed(2);
@@ -26,6 +28,28 @@ const PlaceOrderScreen = ({ history }) => {
   const totalPrice = addDecimal(
     Number(subtotal) + Number(taxPrice) + Number(shippingPrice)
   );
+
+  //Create order
+  const dispatch = useDispatch();
+  const placeOrderHandler = () => {
+    dispatch(
+      createOrder({
+        cartItems,
+        shippingAddress,
+        paymentMethod,
+        taxPrice,
+        shippingPrice,
+        totalPrice,
+      })
+    );
+  };
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`);
+    }
+    // eslint-disable-next-line
+  }, [history, success]);
+
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
@@ -93,7 +117,9 @@ const PlaceOrderScreen = ({ history }) => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button className="btn-block">Place Order</Button>
+                <Button className="btn-block" onClick={placeOrderHandler}>
+                  Place Order
+                </Button>
               </ListGroup.Item>
             </ListGroup>
           </Card>

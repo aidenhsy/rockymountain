@@ -12,6 +12,9 @@ import ShippingScreen from "./ShippingScreen";
 import PaymentScreen from "./PaymentScreen";
 import PlaceOrderScreen from "./PlaceOrderScreen";
 
+//Order
+import OrderScreen from "./OrderScreen";
+
 const screens = {
   Home: HomeScreen,
   Product: ProductScreen,
@@ -22,6 +25,7 @@ const screens = {
   Shipping: ShippingScreen,
   Payment: PaymentScreen,
   PlaceOrder: PlaceOrderScreen,
+  Order: OrderScreen,
 };
 
 export default screens;
