@@ -5,6 +5,9 @@ import {
   ORDER_DETAILS_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
+  ORDER_MY_FAIL,
+  ORDER_MY_REQUEST,
+  ORDER_MY_SUCCESS,
 } from "../constants";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -30,6 +33,22 @@ export const orderDetailsReducer = (
     case ORDER_DETAILS_SUCCESS:
       return { loading: false, order: action.payload };
     case ORDER_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const orderMyReducer = (
+  state = { loading: true, orders: [] },
+  action
+) => {
+  switch (action.type) {
+    case ORDER_MY_REQUEST:
+      return { ...state, loading: true };
+    case ORDER_MY_SUCCESS:
+      return { loading: false, orders: action.payload };
+    case ORDER_MY_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

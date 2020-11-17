@@ -18,7 +18,6 @@ export const addOrderItems = asyncHandler(async (req, res) => {
   if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error("No order items.");
-    return;
   } else {
     const order = new Order({
       orderItems,
@@ -36,7 +35,7 @@ export const addOrderItems = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get order details
+// @desc    Get order by ID
 // @route   GET /api/orders/:id
 // @access  Private
 
@@ -51,4 +50,13 @@ export const getOrderDetails = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Order not found");
   }
+});
+
+// @desc    Get login user's order details
+// @route   GET /api/orders/myorders
+// @access  Private
+
+export const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+  res.json(orders);
 });
