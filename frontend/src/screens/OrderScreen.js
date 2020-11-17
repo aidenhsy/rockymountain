@@ -1,79 +1,66 @@
 import React, { useEffect } from "react";
 
 //Presentation
-import { Button, Col, Image, ListGroup, Row } from "react-bootstrap";
-import CheckoutSteps from "../components/CheckoutSteps";
+import { Col, Image, ListGroup, Row } from "react-bootstrap";
+import Loader from "../components/Loader";
 import Message from "../components/Message";
 
 //Redux
 import { useSelector, useDispatch } from "react-redux";
-import { createOrder } from "../redux/actions/orderActions";
+import { getOrderDetails } from "../redux/actions/orderActions";
 
-const PlaceOrderScreen = ({ history }) => {
-  const { cartItems, shippingAddress, paymentMethod } = useSelector(
-    (state) => state.cart
-  );
+const OrderScreen = ({ match }) => {
+  const dispatch = useDispatch();
+  const orderId = match.params.id;
+  const { order, loading, error } = useSelector((state) => state.orderDetails);
+  useEffect(() => {
+    dispatch(getOrderDetails(orderId));
+  }, [dispatch, orderId]);
 
   //Calculations
   const addDecimals = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2);
   };
-  const subTotal = addDecimals(
-    cartItems.reduce(
-      (accumulator, item) => accumulator + item.price * item.qty,
-      0
-    )
-  );
-  const taxPrice = addDecimals(subTotal * 0.13);
-  const shippingPrice =
-    subTotal < 100 ? addDecimals(Number(10)) : addDecimals(Number(0));
-  const totalPrice = addDecimals(
-    Number(subTotal) + Number(taxPrice) + Number(shippingPrice)
-  );
 
-  const dispatch = useDispatch();
-
-  const { order, success, error } = useSelector((state) => state.orderCreate);
-
-  useEffect(() => {
-    if (success) {
-      history.push(`/orders/${order._id}`);
-    }
-    // eslint-disable-next-line
-  }, [history, success]);
-
-  const placeOrderHandler = () => {
-    dispatch(
-      createOrder({
-        orderItems: cartItems,
-        shippingAddress,
-        paymentMethod,
-        taxPrice,
-        shippingPrice,
-        totalPrice,
-      })
-    );
-  };
-
-  return (
-    <div>
-      <CheckoutSteps step1 step2 step3 step4 />
+  return loading ? (
+    <Loader />
+  ) : error ? (
+    <Message variant="danger">{error}</Message>
+  ) : (
+    <>
+      {" "}
+      <h1>Order ID: {order._id}</h1>
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h4>Shipping Address:</h4>
-              Address: {shippingAddress.address}, {shippingAddress.city},{" "}
-              {shippingAddress.postalCode}, {shippingAddress.country}
+              Address: {order.shippingAddress.address},{" "}
+              {order.shippingAddress.city}, {order.shippingAddress.postalCode},{" "}
+              {order.shippingAddress.country}
             </ListGroup.Item>
             <ListGroup.Item>
               <h4>Payment Method</h4>
-              {paymentMethod}
+              <strong>Method: </strong>
+              {order.paymentMethod}
+              {order.isPaid ? (
+                <Message variant="success">Paid</Message>
+              ) : (
+                <Message variant="danger">Not paid</Message>
+              )}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <h4>Delivery</h4>
+              {order.isDelivered ? (
+                <Message variant="success">Delivered</Message>
+              ) : (
+                <Message variant="danger">Not delivered</Message>
+              )}
             </ListGroup.Item>
             <ListGroup.Item>
               <h4>Order Items</h4>
               <ListGroup variant="flush">
-                {cartItems.map((item, index) => (
+                {order.orderItems.map((item, index) => (
                   <ListGroup.Item key={index}>
                     <Row>
                       <Col md={3}>
@@ -101,19 +88,28 @@ const PlaceOrderScreen = ({ history }) => {
             <ListGroup.Item>
               <Row>
                 <Col>Subtotal: </Col>
-                <Col>$ {subTotal} </Col>
+                <Col>
+                  ${" "}
+                  {addDecimals(
+                    order.orderItems.reduce(
+                      (accumulator, item) =>
+                        accumulator + item.price * item.qty,
+                      0
+                    )
+                  )}{" "}
+                </Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
                 <Col>Shipping: </Col>
-                <Col>{subTotal > 100 ? "$ 0.00" : `$ ${shippingPrice}`} </Col>
+                <Col>$ {order.shippingPrice.toFixed(2)}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
                 <Col>Total: </Col>
-                <Col>$ {totalPrice}</Col>
+                <Col>$ {order.totalPrice.toFixed(2)}</Col>
               </Row>
             </ListGroup.Item>
 
@@ -122,17 +118,11 @@ const PlaceOrderScreen = ({ history }) => {
                 <Message>{error}</Message>
               </ListGroup.Item>
             )}
-
-            <ListGroup.Item>
-              <Button className="btn-block" onClick={placeOrderHandler}>
-                Place Order
-              </Button>
-            </ListGroup.Item>
           </ListGroup>
         </Col>
       </Row>
-    </div>
+    </>
   );
 };
 
-export default PlaceOrderScreen;
+export default OrderScreen;

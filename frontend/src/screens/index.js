@@ -8,9 +8,12 @@ import ProfileScreen from "./ProfileScreen";
 
 //Cart
 import CartScreen from "./CartScreen";
+
+//Order
 import ShippingScreen from "./ShippingScreen";
 import PaymentScreen from "./PaymentScreen";
 import PlaceOrderScreen from "./PlaceOrderScreen";
+import OrderScreen from "./OrderScreen";
 
 const screens = {
   Home: HomeScreen,
@@ -22,6 +25,7 @@ const screens = {
   Shipping: ShippingScreen,
   Payment: PaymentScreen,
   PlaceOrder: PlaceOrderScreen,
+  Order: OrderScreen,
 };
 
 export default screens;
