@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import testRoutes from "./routes/testRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -17,7 +18,8 @@ app.listen(PORT, console.log(`Listening in ${NODE_ENV} on ${PORT}`));
 app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/orders", orderRoutes);
+// app.use("/api/orders", orderRoutes);
+app.use("/api/orders", testRoutes);
 
 app.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
