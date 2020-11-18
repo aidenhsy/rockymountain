@@ -77,16 +77,24 @@ const ProfileScreen = ({ history }) => {
         <h1>Cart Items</h1>
         <ListGroup variant="flush">
           {orders.map((order) => (
-            <ListGroup.Item>
+            <ListGroup.Item key={order._id}>
               <Link to={`/orders/${order._id}`}>
-                <h5>order ID: {order._id}</h5>
+                {order.isPaid ? (
+                  <h5 style={{ color: "green" }}>
+                    Order ID: {order._id} (Paid)
+                  </h5>
+                ) : (
+                  <h5 style={{ color: "red" }}>
+                    Order ID: {order._id} (Not Paid)
+                  </h5>
+                )}
               </Link>
               {order.orderItems.map((item) => (
-                <ListGroup variant="flush">
+                <ListGroup variant="flush" key={item._id}>
                   <ListGroup.Item>
                     <Row>
                       <Col md={2}>
-                        <Image src={item.image} fluid rouded />
+                        <Image src={item.image} fluid rounded />
                       </Col>
                       <Col md={8}>{item.name}</Col>
                       <Col md={2}>Qty: {item.qty}</Col>
