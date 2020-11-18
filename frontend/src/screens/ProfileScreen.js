@@ -7,8 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { USER_PROFILE_UPDATE_RESET } from "../redux/constants";
 
 //Presentational
-import { Button, Col, Form, Image, ListGroup, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 const ProfileScreen = ({ history }) => {
   const [name, setName] = useState("");
@@ -18,7 +20,9 @@ const ProfileScreen = ({ history }) => {
   const { userInfo } = useSelector((state) => state.userLogin);
   const { user } = useSelector((state) => state.userProfile);
   const { success } = useSelector((state) => state.userProfileUpdate);
-  const { orders } = useSelector((state) => state.orderMy);
+  const { orders, loading: loadingOrders, error: errorOrders } = useSelector(
+    (state) => state.orderMy
+  );
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -42,7 +46,7 @@ const ProfileScreen = ({ history }) => {
   return (
     <Row>
       <Col md={3}>
-        <h1>Profile</h1>
+        <h2>Profile</h2>
         {success && <h2>success</h2>}
         <Form onSubmit={submitHandler}>
           <Form.Group>
@@ -73,37 +77,65 @@ const ProfileScreen = ({ history }) => {
         </Form>
       </Col>
       <Col md={9}>
-        <h1>Cart</h1>
-        <ListGroup variant="flush">
-          {orders.map((order) => (
-            <ListGroup.Item key={order._id}>
-              <Link to={`/orders/${order._id}`}>
-                {order.isPaid ? (
-                  <h5 style={{ color: "green" }}>
-                    Order ID: {order._id} (Paid)
-                  </h5>
-                ) : (
-                  <h5 style={{ color: "red" }}>
-                    Order ID: {order._id} (Not Paid)
-                  </h5>
-                )}
-              </Link>
-              {order.orderItems.map((item) => (
-                <ListGroup variant="flush" key={item._id}>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col md={2}>
-                        <Image src={item.image} fluid rounded />
-                      </Col>
-                      <Col md={8}>{item.name}</Col>
-                      <Col md={2}>Qty: {item.qty}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                </ListGroup>
+        <h2>My Orders</h2>
+        {loadingOrders ? (
+          <Loader />
+        ) : errorOrders ? (
+          <Message variant="danger">{errorOrders}</Message>
+        ) : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  <td>{order.createdAt.substring(0, 10)}</td>
+                  <td>${order.totalPrice.toFixed(2)}</td>
+                  <td>
+                    {order.isPaid ? (
+                      order.paidAt.substring(0, 10)
+                    ) : (
+                      <Row className="justify-content-center">
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      </Row>
+                    )}
+                  </td>
+                  <td>
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <Row className="justify-content-center">
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      </Row>
+                    )}
+                  </td>
+                  <td>
+                    <LinkContainer to={`/orders/${order._id}`}>
+                      <Button variant="light" className="btn-sm">
+                        Details
+                      </Button>
+                    </LinkContainer>
+                  </td>
+                </tr>
               ))}
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   );

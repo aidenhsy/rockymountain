@@ -6,6 +6,7 @@ import CartScreen from "./CartScreen";
 import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
 import ProfileScreen from "./ProfileScreen";
+import UserListScreen from "./UserListScreen";
 
 //Checkout
 import ShippingScreen from "./ShippingScreen";
@@ -26,6 +27,7 @@ const screens = {
   Payment: PaymentScreen,
   PlaceOrder: PlaceOrderScreen,
   Order: OrderScreen,
+  UserList: UserListScreen,
 };
 
 export default screens;

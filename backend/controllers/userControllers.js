@@ -8,6 +8,7 @@ export const login = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
+      isAdmin: user.isAdmin,
       name: user.name,
       email: user.email,
       token: generateToken(user._id),
@@ -39,6 +40,9 @@ export const register = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
 export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
@@ -53,6 +57,9 @@ export const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
@@ -74,4 +81,12 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     res.status("401");
     throw new Error("User not found");
   }
+});
+
+// @desc    Get all users
+// @route   GET /api/users/
+// @access  Private/Admin
+export const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
 });

@@ -23,6 +23,7 @@ const App = () => {
           <Route path="/payment" component={screens.Payment} />
           <Route path="/placeorder" component={screens.PlaceOrder} />
           <Route path="/orders/:id" component={screens.Order} />
+          <Route path="/admin/userlist" component={screens.UserList} />
         </Container>
       </main>
       <Footer />
