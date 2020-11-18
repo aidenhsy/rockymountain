@@ -10,8 +10,8 @@ import {
 } from "../controllers/orderControllers.js";
 
 Router.route("/").post(protect, createOrder);
-Router.route("/:id").get(protect, getOrderDetails);
 Router.route("/myorders").get(protect, getMyOrders);
+Router.route("/:id").get(protect, getOrderDetails);
 Router.route("/:id/pay").put(protect, updateOrderToPaid);
 
 export default Router;

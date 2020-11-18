@@ -9,7 +9,7 @@ import { ORDER_PAY_RESET } from "../redux/constants";
 //Presentational
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { Card, Col, Image, ListGroup, Row } from "react-bootstrap";
+import { Button, Card, Col, Image, ListGroup, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { PayPalButton } from "react-paypal-button-v2";
 
@@ -57,128 +57,136 @@ const OrderScreen = ({ match }) => {
     dispatch(payOrder(orderId, paymentResult));
   };
 
-  return loading ? (
-    <Loader />
-  ) : error ? (
-    <Message variant="danger">{error}</Message>
-  ) : (
+  return (
     <>
-      <h2 className="p-3">Order: {order._id}</h2>
-      <Row>
-        <Col md={8}>
-          <ListGroup variant="flush">
-            <ListGroup.Item>
-              <h2>Shipping Address</h2>
-              <p>
-                <strong>Name: </strong> {order.user.name}
-              </p>
-              <p>
-                <strong>Email: </strong>{" "}
-                <a href={`mailto:${order.user.emai}`}>{order.user.email}</a>
-              </p>
-              <p>
-                {order.shippingAddress.address}, {order.shippingAddress.city},{" "}
-                {order.shippingAddress.postalCode},{" "}
-                {order.shippingAddress.country}
-              </p>
-              {order.isDelivered ? (
-                <Message variant="success">
-                  Delivered on {order.delveredAt}
-                </Message>
-              ) : (
-                <Message variant="danger">Not delivered</Message>
-              )}
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <h2>Payment Method</h2>
-              <p>
-                <strong>Method: </strong>
-                {order.paymentMethod}
-              </p>
-              {order.isPaid ? (
-                <Message variant="success">Paid on {order.paidAt}</Message>
-              ) : (
-                <Message variant="danger">Not paid</Message>
-              )}
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <h2>Cart Items</h2>
-              {order.orderItems.map((item) => (
-                <ListGroup variant="flush" key={item.product}>
-                  <ListGroup>
-                    <Row>
-                      <Col md={2}>
-                        <Image src={item.image} fluid rounded />
-                      </Col>
-                      <Col md={5}>
-                        <Link to={`/products/${item.product}`}>
-                          {item.name}
-                        </Link>
-                      </Col>
-                      <Col md={5}>
-                        {item.qty} x ${addDecimal(item.price)} = $
-                        {addDecimal(item.price * item.qty)}
-                      </Col>
-                    </Row>
-                  </ListGroup>
-                </ListGroup>
-              ))}
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <Row>
-                  <Col>SubTotal: </Col>
-                  <Col>
-                    ${" "}
-                    {addDecimal(
-                      order.orderItems.reduce(
-                        (accumulator, item) =>
-                          accumulator + item.qty * item.price,
-                        0
-                      )
-                    )}
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Tax: </Col>
-                  <Col>$ {addDecimal(order.taxPrice)}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Shipping: </Col>
-                  <Col>$ {addDecimal(order.shippingPrice)}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Total: </Col>
-                  <Col>$ {addDecimal(order.totalPrice)}</Col>
-                </Row>
-              </ListGroup.Item>
-              {!order.isPaid && (
+      <Link to="/profile">
+        <Button className="btn-light">Go back</Button>
+      </Link>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <>
+          <h2 className="p-3">Order: {order._id}</h2>
+          <Row>
+            <Col md={8}>
+              <ListGroup variant="flush">
                 <ListGroup.Item>
-                  {loadingPay && <Loader />}
-                  {!sdkReady ? (
-                    <Loader />
+                  <h2>Shipping Address</h2>
+                  <p>
+                    <strong>Name: </strong> {order.user.name}
+                  </p>
+                  <p>
+                    <strong>Email: </strong>{" "}
+                    <a href={`mailto:${order.user.emai}`}>{order.user.email}</a>
+                  </p>
+                  <p>
+                    {order.shippingAddress.address},{" "}
+                    {order.shippingAddress.city},{" "}
+                    {order.shippingAddress.postalCode},{" "}
+                    {order.shippingAddress.country}
+                  </p>
+                  {order.isDelivered ? (
+                    <Message variant="success">
+                      Delivered on {order.delveredAt}
+                    </Message>
                   ) : (
-                    <PayPalButton
-                      amount={order.totalPrice}
-                      onSuccess={successPaymentHandler}
-                    />
+                    <Message variant="danger">Not delivered</Message>
                   )}
                 </ListGroup.Item>
-              )}
-            </ListGroup>
-          </Card>
-        </Col>
-      </Row>
+                <ListGroup.Item>
+                  <h2>Payment Method</h2>
+                  <p>
+                    <strong>Method: </strong>
+                    {order.paymentMethod}
+                  </p>
+                  {order.isPaid ? (
+                    <Message variant="success">Paid on {order.paidAt}</Message>
+                  ) : (
+                    <Message variant="danger">Not paid</Message>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h2>Cart Items</h2>
+                  {order.orderItems.map((item) => (
+                    <ListGroup variant="flush" key={item.product}>
+                      <ListGroup>
+                        <Row>
+                          <Col md={2}>
+                            <Image src={item.image} fluid rounded />
+                          </Col>
+                          <Col md={5}>
+                            <Link to={`/products/${item.product}`}>
+                              {item.name}
+                            </Link>
+                          </Col>
+                          <Col md={5}>
+                            {item.qty} x ${addDecimal(item.price)} = $
+                            {addDecimal(item.price * item.qty)}
+                          </Col>
+                        </Row>
+                      </ListGroup>
+                    </ListGroup>
+                  ))}
+                </ListGroup.Item>
+              </ListGroup>
+            </Col>
+            <Col md={4}>
+              <Card>
+                <ListGroup variant="flush">
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>SubTotal: </Col>
+                      <Col>
+                        ${" "}
+                        {addDecimal(
+                          order.orderItems.reduce(
+                            (accumulator, item) =>
+                              accumulator + item.qty * item.price,
+                            0
+                          )
+                        )}
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Tax: </Col>
+                      <Col>$ {addDecimal(order.taxPrice)}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Shipping: </Col>
+                      <Col>$ {addDecimal(order.shippingPrice)}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Total: </Col>
+                      <Col>$ {addDecimal(order.totalPrice)}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  {!order.isPaid && (
+                    <ListGroup.Item>
+                      {loadingPay && <Loader />}
+                      {!sdkReady ? (
+                        <Loader />
+                      ) : (
+                        <PayPalButton
+                          amount={order.totalPrice}
+                          onSuccess={successPaymentHandler}
+                        />
+                      )}
+                    </ListGroup.Item>
+                  )}
+                </ListGroup>
+              </Card>
+            </Col>
+          </Row>
+        </>
+      )}
     </>
   );
 };

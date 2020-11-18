@@ -2,24 +2,27 @@ import React, { useState, useEffect } from "react";
 
 //Redux
 import { getProfile, updateProfile } from "../redux/actions/userActions";
+import { getMyOrders } from "../redux/actions/orderActions";
 import { useDispatch, useSelector } from "react-redux";
 import { USER_PROFILE_UPDATE_RESET } from "../redux/constants";
 
 //Presentational
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, ListGroup, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const ProfileScreen = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-  const userProfile = useSelector((state) => state.userProfile);
-  const { user } = userProfile;
-  const userProfileUpdate = useSelector((state) => state.userProfileUpdate);
-  const { success } = userProfileUpdate;
+
+  const { userInfo } = useSelector((state) => state.userLogin);
+  const { user } = useSelector((state) => state.userProfile);
+  const { success } = useSelector((state) => state.userProfileUpdate);
+  const { orders } = useSelector((state) => state.orderMy);
+
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(getMyOrders());
     if (!userInfo) {
       history.push("/login");
     } else {
@@ -71,6 +74,36 @@ const ProfileScreen = ({ history }) => {
       </Col>
       <Col md={9}>
         <h1>Cart</h1>
+        <ListGroup variant="flush">
+          {orders.map((order) => (
+            <ListGroup.Item key={order._id}>
+              <Link to={`/orders/${order._id}`}>
+                {order.isPaid ? (
+                  <h5 style={{ color: "green" }}>
+                    Order ID: {order._id} (Paid)
+                  </h5>
+                ) : (
+                  <h5 style={{ color: "red" }}>
+                    Order ID: {order._id} (Not Paid)
+                  </h5>
+                )}
+              </Link>
+              {order.orderItems.map((item) => (
+                <ListGroup variant="flush" key={item._id}>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col md={2}>
+                        <Image src={item.image} fluid rounded />
+                      </Col>
+                      <Col md={8}>{item.name}</Col>
+                      <Col md={2}>Qty: {item.qty}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                </ListGroup>
+              ))}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
       </Col>
     </Row>
   );
