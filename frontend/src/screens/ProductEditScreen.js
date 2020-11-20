@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 //Redux
 import {
@@ -21,8 +22,11 @@ const ProductEditScreen = ({ match, history }) => {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(false);
+  const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const { loading, error, product } = useSelector(
     (state) => state.productDetails
@@ -43,15 +47,48 @@ const ProductEditScreen = ({ match, history }) => {
       } else {
         setName(product.name);
         setPrice(product.price);
+        setImage(product.image);
         setCategory(product.category);
         setCountInStock(product.countInStock);
+        setDescription(product.description);
       }
     }
   }, [dispatch, history, product, productId, successUpdate]);
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      const { data } = await axios.post("/api/upload", formData, config);
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
-      updateProduct({ _id: productId, name, price, category, countInStock })
+      updateProduct({
+        _id: productId,
+        name,
+        price,
+        image,
+        category,
+        countInStock,
+        description,
+      })
     );
   };
   return (
@@ -81,10 +118,26 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Group>
               <Form.Label>Price</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              ></Form.Control>
+              <Form.File
+                id="image-file"
+                label="Choose File"
+                custom
+                onChange={uploadFileHandler}
+              ></Form.File>
+              {uploading && <Loader />}
             </Form.Group>
 
             <Form.Group>
@@ -99,9 +152,18 @@ const ProductEditScreen = ({ match, history }) => {
             <Form.Group>
               <Form.Label>Count In Stock</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 value={countInStock}
                 onChange={(e) => setCountInStock(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
