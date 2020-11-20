@@ -24,6 +24,12 @@ const App = () => {
           <Route path="/placeorder" component={screens.PlaceOrder} />
           <Route path="/orders/:id" component={screens.Order} />
           <Route path="/admin/userlist" component={screens.UserList} />
+          <Route path="/admin/user/:id/edit" component={screens.UserEdit} />
+          <Route path="/admin/productlist" component={screens.ProductList} />
+          <Route
+            path="/admin/product/:id/edit"
+            component={screens.ProductEdit}
+          />
         </Container>
       </main>
       <Footer />

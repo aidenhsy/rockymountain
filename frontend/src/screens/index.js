@@ -7,6 +7,7 @@ import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
 import ProfileScreen from "./ProfileScreen";
 import UserListScreen from "./UserListScreen";
+import UserEditScreen from "./UserEditScreen";
 
 //Checkout
 import ShippingScreen from "./ShippingScreen";
@@ -15,6 +16,10 @@ import PlaceOrderScreen from "./PlaceOrderScreen";
 
 //Order
 import OrderScreen from "./OrderScreen";
+
+//Admin
+import ProductListScreen from "./ProductListScreen";
+import ProductEditScreen from "./ProductEditScreen";
 
 const screens = {
   Home: HomeScreen,
@@ -28,6 +33,9 @@ const screens = {
   PlaceOrder: PlaceOrderScreen,
   Order: OrderScreen,
   UserList: UserListScreen,
+  UserEdit: UserEditScreen,
+  ProductList: ProductListScreen,
+  ProductEdit: ProductEditScreen,
 };
 
 export default screens;
