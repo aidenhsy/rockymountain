@@ -30,6 +30,7 @@ const App = () => {
             path="/admin/product/:id/edit"
             component={screens.ProductEdit}
           />
+          <Route path="/admin/orderlist" component={screens.OrderList} />
         </Container>
       </main>
       <Footer />

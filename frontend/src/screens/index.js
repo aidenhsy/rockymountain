@@ -16,6 +16,7 @@ import PlaceOrderScreen from "./PlaceOrderScreen";
 
 //Order
 import OrderScreen from "./OrderScreen";
+import OrderListScreen from "./OrderListScreen";
 
 //Admin
 import ProductListScreen from "./ProductListScreen";
@@ -36,6 +37,7 @@ const screens = {
   UserEdit: UserEditScreen,
   ProductList: ProductListScreen,
   ProductEdit: ProductEditScreen,
+  OrderList: OrderListScreen,
 };
 
 export default screens;

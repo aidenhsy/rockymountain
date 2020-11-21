@@ -65,6 +65,6 @@ export const updateProduct = asyncHandler(async (req, res) => {
     res.json(updatedProduct);
   } else {
     res.status("401");
-    throw new Error("User not found");
+    throw new Error("Product not found");
   }
 });
