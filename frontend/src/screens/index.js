@@ -6,6 +6,21 @@ import CartScreen from "./CartScreen";
 import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
 import ProfileScreen from "./ProfileScreen";
+import UserListScreen from "./UserListScreen";
+import UserEditScreen from "./UserEditScreen";
+
+//Checkout
+import ShippingScreen from "./ShippingScreen";
+import PaymentScreen from "./PaymentScreen";
+import PlaceOrderScreen from "./PlaceOrderScreen";
+
+//Order
+import OrderScreen from "./OrderScreen";
+import OrderListScreen from "./OrderListScreen";
+
+//Admin
+import ProductListScreen from "./ProductListScreen";
+import ProductEditScreen from "./ProductEditScreen";
 
 const screens = {
   Home: HomeScreen,
@@ -14,6 +29,15 @@ const screens = {
   Register: RegisterScreen,
   Profile: ProfileScreen,
   Cart: CartScreen,
+  Shipping: ShippingScreen,
+  Payment: PaymentScreen,
+  PlaceOrder: PlaceOrderScreen,
+  Order: OrderScreen,
+  UserList: UserListScreen,
+  UserEdit: UserEditScreen,
+  ProductList: ProductListScreen,
+  ProductEdit: ProductEditScreen,
+  OrderList: OrderListScreen,
 };
 
 export default screens;

@@ -19,6 +19,18 @@ const App = () => {
           <Route path="/register" component={screens.Register} />
           <Route path="/profile" component={screens.Profile} />
           <Route path="/cart/:id?" component={screens.Cart} />
+          <Route path="/shipping" component={screens.Shipping} />
+          <Route path="/payment" component={screens.Payment} />
+          <Route path="/placeorder" component={screens.PlaceOrder} />
+          <Route path="/orders/:id" component={screens.Order} />
+          <Route path="/admin/userlist" component={screens.UserList} />
+          <Route path="/admin/user/:id/edit" component={screens.UserEdit} />
+          <Route path="/admin/productlist" component={screens.ProductList} />
+          <Route
+            path="/admin/product/:id/edit"
+            component={screens.ProductEdit}
+          />
+          <Route path="/admin/orderlist" component={screens.OrderList} />
         </Container>
       </main>
       <Footer />
